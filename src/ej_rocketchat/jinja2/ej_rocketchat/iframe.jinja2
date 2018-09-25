@@ -18,7 +18,7 @@
             </form>
         </div>
     {% else %}
-        <iframe class="RocketIFrame" src="{{ rocketchat_url }}"></iframe>
+        <iframe id="iframe-rocket" class="RocketIFrame" src="{{ rocketchat_url }}"></iframe>
         <style>
             /* Disable lower navigation bar */
             .Header-lowerNav {
@@ -26,14 +26,21 @@
             }
         </style>
         <script>
-            // Login in Rocket.Chat using js.
-            (function () {
-                console.log("rocket.chat token: " + "{{ auth_token.replace('\"', '\\\\\"') }}");
-                document.querySelector('iframe.RocketIFrame').contentWindow.postMessage({
-                    externalCommand: 'login-with-token',
-                    token: "{{ auth_token.replace('"', '\\"') }}",
-                }, '*')
-            })();
+            $('iframe').ready(function(){
+                console.log("{{ user_id }}");
+                console.log("{{ auth_token }}");
+                // Login in Rocket.Chat using js.
+                (function () {
+                    console.log("rocket.chat token: " + "{{ auth_token.replace('\"', '\\\\\"') }}");
+                    document.getElementById('iframe-rocket').contentWindow.postMessage({
+                        externalCommand: 'login-with-token',                        
+                        event: 'login-with-token',
+                        loginToken: "{{ auth_token }}",
+                        userId: "{{ user_id }}",
+                    }, '*')
+                    console.log(document.getElementById('iframe-rocket').contentWindow);
+                })();
+            });
         </script>
     {% endif %}
 {% endblock %}

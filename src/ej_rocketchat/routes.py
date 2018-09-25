@@ -34,17 +34,25 @@ def iframe(request):
 
     else:
         account = rocket.find_or_create_account(request.user)
+        #account = rocket.login(request.user)
         if account is None:
+            print('aaaaaaaaaaaaaaaaaaaaaaaaccount')
             return redirect('rocket:register')
+        
+        print(dir(account))
+        account = rocket.login(request.user)
         token = account.auth_token
+        #print(token)
         username = account.username
-        rocket.login(request.user)
+        user_rc_id = account.user_rc_id
+        #print(test.auth_token)
 
     return {
         'rocketchat_url': rocket.url,
         'username': username,
         'auth_token': token,
         'auth_token_repr': repr(token),
+        'user_id': user_rc_id,
         'ask_password_form': ask_password_form,
         'ask_password': ask_password,
     }

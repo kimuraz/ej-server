@@ -97,6 +97,7 @@ class RCConfigWrapper:
                 raise PermissionError('invalid credentials')
             raise
         log.info(f'{username} successfully logged in at Rocket.Chat')
+        log.info(f'Response {response}')
         return response
 
     def logout(self, user):
@@ -153,7 +154,9 @@ class RCConfigWrapper:
         try:
             return self.accounts.get(user=user)
         except self.accounts.model.DoesNotExist:
-            return self.register(user, user.username)
+            pass
+
+        return None
 
 
 rocket = RCConfigWrapper()
